@@ -1,0 +1,10 @@
+{
+  "name": "vivaldi-tweaks",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "install:vivaldi": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/install.ps1 -Action Install",
+    "uninstall:vivaldi": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/install.ps1 -Action Uninstall"
+  }
+}

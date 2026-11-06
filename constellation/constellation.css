@@ -1,0 +1,65 @@
+/*
+ * Signal constellation — Vivaldi UI only.
+ * All overrides switch off when constellation.js removes data-constellation.
+ * Use a dark Vivaldi theme to keep menus, panels, and native controls coherent.
+ */
+#browser[data-constellation] {
+  --constellation-opacity: 0.85;
+  --constellation-blur: 0.4px;
+  isolation: isolate;
+  background: linear-gradient(135deg, #07151a, #101222) !important;
+}
+
+#browser[data-constellation] > #vivaldi-constellation-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  /* Isolation keeps this above the root background and below all UI controls. */
+  z-index: -1;
+  pointer-events: none;
+  opacity: var(--constellation-opacity);
+  filter: blur(var(--constellation-blur)) saturate(0.82);
+}
+
+/* Structural surfaces only: never make every .toolbar or every button clear. */
+#browser[data-constellation] :is(
+  #header,
+  #main,
+  #main > .inner,
+  .mainbar,
+  .tabbar-wrapper,
+  #tabs-tabbar-container,
+  #tabs-container,
+  .toolbar-mainbar,
+  .toolbar-mainbar > .toolbar-extensions,
+  .toolbar-statusbar,
+  .bookmark-bar,
+  #panels-container,
+  #switch
+),
+#browser[data-constellation] > footer {
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+/* An inset border keeps tab dimensions and native focus outlines unchanged.
+ * Include the second tab-stack row as well as the main tab strip. */
+#browser[data-constellation] :is(#tabs-container, #tabs-subcontainer) .tab.active {
+  box-shadow:
+    inset 0 0 0 1px rgba(226, 210, 255, 0.8),
+    0 3px 8px rgba(0, 0, 0, 0.55);
+}
+
+/* Preserve readable input surfaces, active tabs, menus, and expanded panels.
+ * Web content, including Vivaldi's Start Page, remains opaque and unmodified. */
+#browser[data-constellation] #webview-container,
+#browser[data-constellation] #panels-container .panel-group {
+  background: var(--colorBg, #07151a) !important;
+}
+
+#browser[data-constellation] .UrlBar-AddressField,
+#browser[data-constellation] .UrlBar-SearchField {
+  background-color: var(--colorBgAlphaHeavy, rgba(7, 21, 26, 0.88));
+}

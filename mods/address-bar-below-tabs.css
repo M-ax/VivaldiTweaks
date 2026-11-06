@@ -1,0 +1,50 @@
+/*
+ * Vivaldi 8.2: reveal an auto-hidden address bar below persistent top tabs.
+ * Load this folder through Settings > Appearance > Custom UI Modifications.
+ *
+ * Restrict the fix to an address-only floating toolbar. Other tab positions,
+ * fullscreen, and wrappers containing tabs, bookmarks, or menus stay native.
+ */
+@supports (min-height: anchor-size(--vt-persistent-tabs height)) {
+  #browser.auto-hide.tabs-top.address-top:not(.fullscreen):has(
+    > #header #tabs-tabbar-container.top
+  ):has(
+    > .auto-hide-wrapper.top.has-mainbar:not(.has-tabbar) > .mainbar:only-child
+  ) {
+    > #header {
+      anchor-name: --vt-persistent-tabs;
+      /* Keep the tabs above the floating toolbar during its slide animation. */
+      z-index: 6;
+    }
+
+    > .auto-hide-wrapper.top.has-mainbar:not(.has-tabbar) {
+      /*
+       * Vivaldi measures this box to size its native hover hotspot. Include
+       * the tab row in that box rather than moving the whole wrapper down.
+       * 34px + density padding is Vivaldi 8.2's native mainbar height.
+       */
+      min-height: calc(
+        anchor-size(--vt-persistent-tabs height) + 34px + 2 * var(--densityGap)
+      );
+      justify-content: flex-end;
+      background: transparent;
+      box-shadow: none;
+
+      /*
+       * Let clicks reach the tabs. Reset the wrapper's native drag region
+       * without creating a no-drag rectangle over the persistent tab strip.
+       */
+      pointer-events: none;
+      app-region: initial;
+
+      &.show > .mainbar {
+        pointer-events: auto;
+      }
+
+      > .mainbar {
+        flex: 0 0 auto;
+        box-shadow: 0 0 0 1px rgb(0 0 0 / 10%), 0 3px 10px rgb(0 0 0 / 30%);
+      }
+    }
+  }
+}
